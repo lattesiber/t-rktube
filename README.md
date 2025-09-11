@@ -1,1 +1,2 @@
-# t-rktube
+lattesiber pixelasanes
+bu çakma microsoft pixelsense'dir
