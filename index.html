@@ -52,7 +52,7 @@
       pointer-events: all;
     }
     h1 {
-      font-size: 22px;
+      font-size: 28px;
     }
   </style>
 </head>
@@ -60,10 +60,8 @@
   <canvas id="stars"></canvas>
   <div id="centerL">L</div>
   <div id="overlay">
-    <h1>Lattesiber Flash Player .</h1>
-  </div>  <!-- Ses dosyası --><audio id="clickSound" src="windows media center.mp3"></audio>
-
-  <script>
+    <h1>Lattesiber Flash Player</h1>
+  </div>  <script>
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -98,11 +96,9 @@
 
     const L = document.getElementById('centerL');
     const overlay = document.getElementById('overlay');
-    const sound = document.getElementById('clickSound');
 
     L.addEventListener('click', () => {
       overlay.classList.add('active');
-      sound.play();
     });
   </script></body>
 </html>
