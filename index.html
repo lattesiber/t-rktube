@@ -8,7 +8,7 @@
       margin: 0;
       height: 100vh;
       overflow: hidden;
-      background: black;
+      background: blue;
       color: white;
       font-family: Arial, sans-serif;
       display: flex;
@@ -36,30 +36,23 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0, 0, 50, 0.95);
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       text-align: center;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.6s ease;
       z-index: 2;
+      padding: 20px;
     }
     #overlay.active {
       opacity: 1;
       pointer-events: all;
     }
     h1 {
-      margin-bottom: 20px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      margin: 5px 0;
+      font-size: 22px;
     }
   </style>
 </head>
@@ -67,17 +60,8 @@
   <canvas id="stars"></canvas>
   <div id="centerL">L</div>
   <div id="overlay">
-    <h1>Lattesiber Flash Player</h1>
-    <p>Desteklenen cihazlar:</p>
-    <ul>
-      <li>Telefon</li>
-      <li>Tablet</li>
-      <li>PC</li>
-      <li>Akıllı tahta</li>
-      <li>Laptop</li>
-      <li>Diğer cihazlar</li>
-    </ul>
-  </div>  <!-- Ses dosyası --><audio id="clickSound" src="click.mp3"></audio>
+    <h1>Lattesiber Flash Player .</h1>
+  </div>  <!-- Ses dosyası --><audio id="clickSound" src="windows media center.mp3"></audio>
 
   <script>
     const canvas = document.getElementById('stars');
