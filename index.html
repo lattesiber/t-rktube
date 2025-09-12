@@ -1,104 +1,195 @@
-<!DOCTYPE html><html lang="tr">
+<<!DOCTYPE html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lattesiber PixelSense</title>
+  <title>Lattesiber Pixelasanes</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
-      overflow: hidden;
-      background: blue;
-      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow: hidden;
     }
-    canvas {
+
+    .stars {
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      background: radial-gradient(white, transparent) 1px 1px;
+      background-size: 3px 3px;
+      animation: twinkle 2s infinite alternate;
     }
-    #centerL {
-      position: relative;
-      font-size: 120px;
-      font-weight: bold;
+
+    @keyframes twinkle {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+
+    .center {
+      font-size: 80px;
+      color: white;
       cursor: pointer;
-      z-index: 1;
+      z-index: 2;
     }
-    #overlay {
+
+    .flash {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      color: white;
+      display: none;
+      z-index: 3;
+    }
+
+    .ui {
+      position: absolute;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 50, 0.95);
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAYEBQYF
+      BAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUo
+      KSgBBwcHCggKEwoKEygaFhooKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo
+      KCgoKCgoKCgoKCv/...') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .topbar {
+      width: 100%;
       display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      color: white;
+      font-size: 20px;
+    }
+
+    .circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      margin: 20px;
+      cursor: pointer;
+    }
+
+    .app {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s ease;
-      z-index: 2;
-      padding: 20px;
     }
-    #overlay.active {
-      opacity: 1;
-      pointer-events: all;
+
+    .search-box {
+      margin: 20px;
     }
-    h1 {
-      font-size: 28px;
+
+    .search-box input {
+      padding: 10px;
+      width: 250px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    .search-box button {
+      padding: 10px 15px;
+      margin-left: 5px;
+      border: none;
+      border-radius: 10px;
+      background: #ffcc00;
+      cursor: pointer;
+    }
+
+    iframe {
+      width: 90%;
+      height: 400px;
+      border-radius: 15px;
+      border: none;
+      display: none;
+    }
+
+    .back-btn {
+      margin: 10px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #ff3333;
+      color: white;
+      cursor: pointer;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <canvas id="stars"></canvas>
-  <div id="centerL">L</div>
-  <div id="overlay">
-    <h1>Lattesiber Flash Player</h1>
-  </div>  <script>
-    const canvas = document.getElementById('stars');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  <div class="stars"></div>
+  <div class="center" id="L">L</div>
+  <div class="flash" id="flash">Lattesiber Flash Player</div>
 
-    let stars = [];
-    for (let i = 0; i < 150; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2,
-        speed: Math.random() * 0.5
-      });
-    }
+  <div class="ui" id="ui">
+    <div class="topbar">
+      <div id="menu">📂 Ana Menü</div>
+      <div id="exit">❌ Çıkış</div>
+    </div>
+    <div class="app">
+      <h1>Lattesiber Pixelasanes</h1>
+      <div class="search-box" id="search-area">
+        <input type="text" id="search" placeholder="Yandex'te ara...">
+        <button onclick="search()">Ara</button>
+      </div>
+      <button class="back-btn" id="backBtn" onclick="goBack()">⬅ Geri</button>
+      <iframe id="browser"></iframe>
+    </div>
+    <div class="circle"></div>
+  </div>
 
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "white";
-      for (let star of stars) {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-        star.y += star.speed;
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
-        }
+  <script>
+    const L = document.getElementById("L");
+    const flash = document.getElementById("flash");
+    const ui = document.getElementById("ui");
+    const browser = document.getElementById("browser");
+    const backBtn = document.getElementById("backBtn");
+    const searchArea = document.getElementById("search-area");
+    const exit = document.getElementById("exit");
+
+    L.onclick = () => {
+      L.style.display = "none";
+      flash.style.display = "block";
+      setTimeout(() => {
+        flash.style.display = "none";
+        ui.style.display = "flex";
+      }, 1000);
+    };
+
+    function search() {
+      const query = document.getElementById("search").value;
+      if(query.trim() !== "") {
+        browser.src = "https://yandex.com/search/?text=" + encodeURIComponent(query);
+        browser.style.display = "block";
+        searchArea.style.display = "none";
+        backBtn.style.display = "inline-block";
       }
-      requestAnimationFrame(drawStars);
     }
-    drawStars();
 
-    const L = document.getElementById('centerL');
-    const overlay = document.getElementById('overlay');
+    function goBack() {
+      browser.style.display = "none";
+      searchArea.style.display = "flex";
+      backBtn.style.display = "none";
+    }
 
-    L.addEventListener('click', () => {
-      overlay.classList.add('active');
-    });
-  </script></body>
+    exit.onclick = () => {
+      ui.style.display = "none";
+      L.style.display = "block";
+    };
+  </script>
+</body>
 </html>
